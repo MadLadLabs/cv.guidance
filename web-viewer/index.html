@@ -1,0 +1,193 @@
+<html>
+  <head>
+    <title>CV Tracking</title>
+    <script>
+        var set_initial_tracker_url = "{{ url_for('set_initial_tracker') }}";
+
+        var trackerGate = null;
+
+        function send_initial_tracker() {
+          if (trackerGate)
+          {
+            var http = new XMLHttpRequest();
+            http.open('put', set_initial_tracker_url, true);
+            var form_data = new FormData();
+
+            for ( var key in trackerGate ) {
+                form_data.append(key, trackerGate[key]);
+            }
+            http.send(form_data);
+          }
+        }
+
+        
+        function submitForm(url) {
+            var http = new XMLHttpRequest();
+            http.open('post', url, true);
+            http.send();
+        }
+
+        function getCursorPosition(canvas, event) {
+          const rect = canvas.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
+          return {x: x, y: y};
+        }
+
+        function getTouchPos(canvas, event) {
+          var rect = canvas.getBoundingClientRect();
+          return {
+            x: event.touches[0].clientX - rect.left,
+            y: event.touches[0].clientY - rect.top
+          };
+        }
+
+        function preventDefault(e) {
+            e.preventDefault();
+        }
+        function disableScroll() {
+            document.body.addEventListener('touchmove', preventDefault, { passive: false });
+        }
+        function enableScroll() {
+            document.body.removeEventListener('touchmove', preventDefault);
+        }
+
+        window.onload = () => {
+          // document.body.addEventListener('touchmove', preventDefault, {passive: false});
+          var imageContainer = document.getElementById('imageContainer');
+          var image = document.getElementById('video_feed');
+          image.addEventListener('click', () => {}, false);
+          image.addEventListener('touchstart', () => {}, false);
+          image.addEventListener('mousedown', () => {}, false);
+          image.addEventListener('touchend', () => {}, false);
+          image.addEventListener('mouseup', () => {}, false);
+          image.addEventListener('touchmove', () => {}, false);
+          image.addEventListener('mousemove', () => {}, false);
+
+          var canvas = document.getElementById('canvas');
+          canvas.width = canvas.offsetWidth;
+          canvas.height = canvas.offsetHeight;
+          var ctx = canvas.getContext('2d');
+
+          var last_mousex = last_mousey = 0;
+          var mousex =  mousey = 0;
+          var mousedown = false;
+
+          canvas.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            var clickPos = getCursorPosition(canvas, e);
+            last_mousex = clickPos.x;
+            last_mousey = clickPos.y;
+            console.log(`last_mousex:${last_mousex}; last_mousey:${last_mousey}`);
+            mousedown = true;
+            return false;
+          }, false);
+
+          canvas.addEventListener('touchstart', (e) => {
+            disableScroll();
+            e.preventDefault();
+            console.log('touchstart!');
+            var touch = e.touches[0];
+            var mouseEvent = new MouseEvent('mousedown',{
+              clientX: touch.clientX,
+              clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+            return false;
+          }, false);
+          
+          canvas.addEventListener('mouseup', (e) => {
+            mousedown = false;
+            return false;
+          }, false);
+          canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            var mouseEvent = new MouseEvent('mouseup',{});
+            canvas.dispatchEvent(mouseEvent);
+            enableScroll();
+            return false;
+          }, false);
+          
+          document.body.addEventListener('touchcancel', () => {
+            var mouseEvent = new MouseEvent('mouseup',{});
+            canvas.dispatchEvent(mouseEvent);
+            return false;
+          });
+          
+          canvas.addEventListener('mousemove', (e) => {
+            e.preventDefault();
+            var clickPos = getCursorPosition(canvas, e);
+            mousex = clickPos.x;
+            mousey = clickPos.y;
+            if (mousedown) {
+              ctx.clearRect(0,0,canvas.width,canvas.height); //clear canvas
+              ctx.beginPath();
+              var width = mousex-last_mousex;
+              var height = mousey-last_mousey;
+              // console.log(mousex);
+              // console.log(mousey);
+              // console.log(width);
+              // console.log(height);
+              ctx.rect(last_mousex,last_mousey,width,height);
+              trackerGate = {
+                xmin: Math.min(last_mousex, last_mousex + width),
+                xmax: Math.max(last_mousex, last_mousex + width),
+                ymin: Math.min(last_mousey, last_mousey + height),
+                ymax: Math.max(last_mousey, last_mousey + height)
+              };
+              ctx.strokeStyle = 'red';
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
+            return false;
+          }, false);
+          canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            var touch = e.touches[0];
+            var mouseEvent = new MouseEvent('mousemove',{
+              clientX: touch.clientX,
+              clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+            return false;
+          }, true);
+        }
+        </script>
+    <style>
+      .outsideWrapper{ 
+          width:{{ image_width }}px; height:{{ image_height }}px; 
+          position:relative; top:0px; left:0px;
+          margin:8px;
+      }
+      .imageContainer{ 
+          width:100%; height:100%; 
+          position:relative; top:0px; left:0px;
+          z-index: -1;
+          cursor: crosshair;
+      }
+      .videoFeed{ 
+          cursor: pointer;
+      }
+      .overlayContainer{ 
+          width:100%; height:100%; 
+          position:absolute; top:0px; left:0px;
+          /* background-color: rgba(255,0,0,.1); */
+          cursor: crosshair;
+          pointer-events: all;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Tracking</h1>
+    <div class="outsideWrapper">
+      <div class="overlayContainer">
+        <canvas id="canvas" style="width: 100%; height: 100%;;"></canvas>
+      </div>
+      <div class="imageContainer" id="imageContainer">
+        <img id="video_feed" class="videoFeed" src="{{ url_for('video_feed') }}">
+      </div>
+    </div>
+    <input type="button" value="Designate Tracker (iOS)" onclick="submitForm('FU_iOS_LOL')">
+    <input type="button" value="Set Tracker" onclick="send_initial_tracker()">
+  </body>
+</html>
