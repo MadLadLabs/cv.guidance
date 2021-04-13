@@ -10,6 +10,8 @@ import cv2
 import os
 # from imutils.video import VideoStream
 
+
+# TODO: Make resolution automatically detected in the webapp component or configurable via ROS or docker at deploy time
 WIDTH = 1280
 HEIGHT = 720
 FPS = 30
