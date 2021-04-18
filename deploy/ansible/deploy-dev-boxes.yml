@@ -1,0 +1,61 @@
+# don't forget to add a hosts file
+---
+- name: Deploy prereqs for dev boxes
+  hosts: dev_boxes
+  become_method: sudo
+  tasks:
+    - name: Install packages
+      become: yes
+      ansible.builtin.package:
+        name:
+          - python3-pip
+          - python3-dev
+          - python3-venv
+          - git
+          - v4l-utils
+          - ffmpeg
+          - libsm6
+          - libxext6
+        state: present
+
+    - name: Register username on host
+      command: whoami
+      register: username_register
+
+    - name: Create appdev directory
+      become: yes
+      ansible.builtin.file:
+        path: /appdev
+        state: directory
+        owner: "{{ username_register.stdout | trim }}"
+
+    - name: Create opencv3 environment
+      ansible.builtin.pip:
+        virtualenv: /appdev/opencv3
+        virtualenv_command: /usr/bin/python3 -m venv
+        name:
+          - numpy
+          - opencv-contrib-python==3.4.13.47
+          - imutils
+          - flask
+
+    - name: Allow all access to tcp port 80
+      become: yes
+      community.general.ufw:
+        rule: allow
+        port: '8080'
+        proto: tcp
+      register: ufw_rule_8080
+
+    - name: Reload UFW
+      become: yes
+      community.general.ufw:
+        state: reloaded
+      when: ufw_rule_8080.changed
+
+    - name: Add current user to video and dialout (serial/UART) groups
+      become: yes
+      command: "adduser {{ username_register.stdout | trim }} {{ item }}"
+      loop:
+        - video
+        - dialout
