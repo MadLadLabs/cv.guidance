@@ -1,0 +1,14 @@
+FROM ros:foxy
+
+COPY pub_sub_example /ros2_packages/pub_sub_example
+
+WORKDIR /ros2_packages
+
+RUN . /opt/ros/foxy/setup.sh && \
+    colcon build
+
+RUN sed --in-place --expression \
+      '$isource "/ros2_packages/install/setup.bash"' \
+      /ros_entrypoint.sh
+
+CMD [ "ros2", "run", "pub_sub_example", "publisher_node" ]
