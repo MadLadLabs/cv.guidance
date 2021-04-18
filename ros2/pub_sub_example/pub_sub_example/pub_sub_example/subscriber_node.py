@@ -7,7 +7,8 @@ class Subscriber(Node):
 
     def __init__(self):
         super().__init__('subscriber')
-        self.publisher_ = self.create_subscription(String, 'my_topic', self.listener_callback, 10)
+        self.subscription = self.create_subscription(String, 'my_topic', self.listener_callback, 10)
+        self.subscription
 
     def listener_callback(self, msg):
         self.get_logger().info(f'Received: "{msg.data}"')
