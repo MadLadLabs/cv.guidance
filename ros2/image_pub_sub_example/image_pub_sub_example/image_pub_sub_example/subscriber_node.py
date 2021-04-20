@@ -49,7 +49,7 @@ def web_thread_func(subscriber):
                 continue
             yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + 
                 bytearray(encodedImage) + b'\r\n')
-            time.sleep(0.01)
+            time.sleep(0.1)
 
     @app.route("/video_feed")
     def video_feed():
