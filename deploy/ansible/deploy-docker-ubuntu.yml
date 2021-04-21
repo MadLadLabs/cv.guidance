@@ -48,29 +48,16 @@
       register: username_register
       changed_when: false
 
-    - name: Add current user to docker group
+    - name: Add current user to docker
       become: yes
       command: "adduser {{ username_register.stdout | trim }} docker"
 
-    - name: Register OS name
-      command: uname -s
-      register: os_name_register
-      changed_when: false
-
-    - name: Register OS architecture
-      command: uname -m
-      register: os_arch_register
-      changed_when: false
-
     - name: Download docker-compose
       become: yes
-      get_url:
-        url: https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Linux-x86_64
-        dest: /usr/local/bin/docker-compose
-        checksum: sha256:8097769d32e34314125847333593c8edb0dfc4a5b350e4839bef8c2fe8d09de7
-
+      warn: false
+      command: curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    
     - name: Apply executable permissions to the docker-compose binary
       become: yes
-      ansible.builtin.file:
-        path: /usr/local/bin/docker-compose
-        mode: a+x
+      command: chmod +x /usr/local/bin/docker-compose
+
