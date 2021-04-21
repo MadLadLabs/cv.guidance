@@ -23,7 +23,7 @@ class Publisher(Node):
         self.br = CvBridge()
 
     def timer_callback(self):
-        self.publisher_.publish(self.br.cv2_to_imgmsg(self.image))
+        self.publisher_.publish(self.br.cv2_to_imgmsg(self.image, encoding="bgr8"))
         self.get_logger().info('Publishing image')
 
 def main():
