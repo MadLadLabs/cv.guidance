@@ -17,14 +17,14 @@ RUN pip3 install \
     opencv-contrib-python==3.4.13.47 \
     imutils
 
-COPY image_pub_sub_example /ros2_packages/image_pub_sub_example
+COPY ../image_pub_sub_example /ros2_packages/image_pub_sub_example
 
 WORKDIR /ros2_packages
 
 RUN . /opt/ros/foxy/setup.sh && \
     colcon build
 
-COPY images /images
+COPY ../images /images
 
 RUN sed --in-place --expression \
       '$isource "/ros2_packages/install/setup.bash"' \

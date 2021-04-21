@@ -1,8 +1,8 @@
 version: "3.9"
 services:
   image_subscriber:
-    build: Dockerfile.subscriber
+    build: image_pub_sub_subscriber
     ports:
       - "8080:8080"
   image_publisher:
-    build: Dockerfile.publisher
+    build: image_pub_sub_publisher

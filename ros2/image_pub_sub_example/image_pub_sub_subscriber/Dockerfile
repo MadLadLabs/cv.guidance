@@ -20,14 +20,14 @@ RUN pip3 install \
 RUN pip3 install \
     flask
 
-COPY image_pub_sub_example /ros2_packages/image_pub_sub_example
+COPY ../image_pub_sub_example /ros2_packages/image_pub_sub_example
 
 WORKDIR /ros2_packages
 
 RUN . /opt/ros/foxy/setup.sh && \
     colcon build
 
-COPY html_templates /html_templates
+COPY ../html_templates /html_templates
 
 ENV VIEW_TEMPLATES_PATH /html_templates
 
