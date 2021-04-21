@@ -14,6 +14,7 @@
 
   <exec_depend>homing_missile_interfaces</exec_depend>
   <exec_depend>rosidl_default_runtime</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
 
   <member_of_group>rosidl_interface_packages</member_of_group>
   <export>
