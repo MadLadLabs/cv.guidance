@@ -18,12 +18,12 @@ class Publisher(Node):
             time.sleep(1)
             image_path = self.get_parameter('image_path')
         self.get_logger().info(f'"image_path" parameter value: "{image_path.value}"')
-        self.image = cv2.imread(image_path.value,0)
+        self.image = cv2.imread(image_path.value)
         self.timer = self.create_timer(publish_period, self.timer_callback)
         self.br = CvBridge()
 
     def timer_callback(self):
-        self.publisher_.publish(self.br.cv2_to_imgmsg(self.image, encoding="bgr8"))
+        self.publisher_.publish(self.br.cv2_to_imgmsg(self.image))
         self.get_logger().info('Publishing image')
 
 def main():
