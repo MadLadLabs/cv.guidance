@@ -1,0 +1,63 @@
+---
+- name: Deploy prereqs for dev boxes
+  hosts: docker_hosts
+  become_method: sudo
+  tasks:
+    - name: Install packages
+      become: yes
+      ansible.builtin.package:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+          - python3-apt
+        state: present
+
+    - name: Add Docker’s official GPG key
+      become: yes
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        keyring: /usr/share/keyrings/docker-archive-keyring.gpg
+    
+    - name: Get ubuntu release
+      command: lsb_release -cs
+      register: release_register
+      changed_when: false
+
+    - name: Set up the stable docker repository
+      become: yes
+      ansible.builtin.apt_repository:
+        repo: >-
+          deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg]
+          https://download.docker.com/linux/ubuntu {{ release_register.stdout | trim }} stable
+        state: present
+
+    - name: Install packages
+      become: yes
+      ansible.builtin.package:
+        name:
+          - docker-ce 
+          - docker-ce-cli
+          - containerd.io
+        state: present
+
+    - name: Register username on host
+      command: whoami
+      register: username_register
+      changed_when: false
+
+    - name: Add current user to docker
+      become: yes
+      command: "adduser {{ username_register.stdout | trim }} docker"
+
+    - name: Download docker-compose
+      become: yes
+      warn: false
+      command: curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    
+    - name: Apply executable permissions to the docker-compose binary
+      become: yes
+      command: chmod +x /usr/local/bin/docker-compose
+
