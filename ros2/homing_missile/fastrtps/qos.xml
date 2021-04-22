@@ -17,9 +17,15 @@
                 <publishMode>
                     <kind>SYNCHRONOUS</kind>
                 </publishMode>
+            <historyMemoryPolicy>PREALLOCATED_WITH_REALLOC</historyMemoryPolicy>
             </qos>
         </publisher>
 
+        <!-- Request subscriber profile for services -->
+        <subscriber profile_name="default subscriber profile" is_default_profile="true">
+            <historyMemoryPolicy>PREALLOCATED_WITH_REALLOC</historyMemoryPolicy>
+        </subscriber>
+        
         <!-- Request subscriber profile for services -->
         <subscriber profile_name="service">
             <historyMemoryPolicy>PREALLOCATED_WITH_REALLOC</historyMemoryPolicy>
