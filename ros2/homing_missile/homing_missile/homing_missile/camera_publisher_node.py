@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from rclpy.qos import qos_profile_default, qos_profile_sensor_data
+from rclpy.qos import qos_profile_system_default, qos_profile_sensor_data
 from homing_missile_interfaces.msg import SynchronizedImage
 from std_msgs.msg import Int64
 from cv_bridge import CvBridge
@@ -17,8 +17,8 @@ class CameraPublisher(Node):
 
         self.__init_params()
 
-        self.publisher_ = self.create_publisher(SynchronizedImage, 'raw_indexed_image', qos_profile=qos_profile_default) # , qos_profile=qos_profile_sensor_data
-        self.subscription_ = self.create_subscription(Int64, 'flight_controller_millis', self.__millis_callback, qos_profile=qos_profile_default) #, qos_profile=qos_profile_sensor_data
+        self.publisher_ = self.create_publisher(SynchronizedImage, 'raw_indexed_image', qos_profile=qos_profile_system_default) # , qos_profile=qos_profile_sensor_data
+        self.subscription_ = self.create_subscription(Int64, 'flight_controller_millis', self.__millis_callback, qos_profile=qos_profile_system_default) #, qos_profile=qos_profile_sensor_data
         self.subscription_ # suppresses unused variable warning
 
         self.__init_cap()

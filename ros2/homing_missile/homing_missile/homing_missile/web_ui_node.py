@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from rclpy.qos import qos_profile_default, qos_profile_sensor_data
+from rclpy.qos import qos_profile_system_default, qos_profile_sensor_data
 from homing_missile_interfaces.msg import SynchronizedImage
 from cv_bridge import CvBridge
 
@@ -17,7 +17,7 @@ class WebUINode(Node):
 
     def __init__(self):
         super().__init__('web_ui_node')
-        self.subscription = self.create_subscription(SynchronizedImage, 'raw_indexed_image', self.listener_callback, qos_profile=qos_profile_default) # , qos_profile=qos_profile_sensor_data
+        self.subscription = self.create_subscription(SynchronizedImage, 'raw_indexed_image', self.listener_callback, qos_profile=qos_profile_system_default) # , qos_profile=qos_profile_sensor_data
         self.subscription
         self.br = CvBridge()
         self.image = None
