@@ -17,8 +17,8 @@
                 <publishMode>
                     <kind>SYNCHRONOUS</kind>
                 </publishMode>
-            <historyMemoryPolicy>PREALLOCATED_WITH_REALLOC</historyMemoryPolicy>
             </qos>
+            <historyMemoryPolicy>PREALLOCATED_WITH_REALLOC</historyMemoryPolicy>
         </publisher>
 
         <!-- Request subscriber profile for services -->
