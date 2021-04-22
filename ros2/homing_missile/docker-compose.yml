@@ -1,8 +1,14 @@
 version: "3.9"
 services:
-  image_publisher:
+  camera_publisher_node:
     build: 
       context: .
-      dockerfile: Dockerfile.publisher
+      dockerfile: Dockerfile.camera_publisher_node
     devices:
       - "/dev/video0:/dev/video0"
+  web_ui_node:
+    build: 
+      context: .
+      dockerfile: Dockerfile.web_ui_node
+    ports:
+      - "8080:8080"

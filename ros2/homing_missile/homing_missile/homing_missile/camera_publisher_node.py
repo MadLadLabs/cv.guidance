@@ -73,7 +73,7 @@ class CameraPublisher(Node):
             with self.millis_lock:
                 msg.millis = self.millis
             self.publisher_.publish(msg)
-            self.get_logger().debug('Published sunchronized video frame')
+            self.get_logger().debug('Published synchronized video frame')
             time.sleep(0.005)
 
 def main():

@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'camera_publisher_node = homing_missile.camera_publisher_node:main'
+            'camera_publisher_node = homing_missile.camera_publisher_node:main',
+            'web_ui_node = homing_missile.web_ui_node:main',
         ],
     },
 )
