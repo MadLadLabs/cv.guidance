@@ -17,8 +17,8 @@ class CameraPublisher(Node):
 
         self.__init_params()
 
-        self.publisher_ = self.create_publisher(SynchronizedImage, 'raw_indexed_image', qos_profile=qos_profile_sensor_data)
-        self.subscription_ = self.create_subscription(Int64, 'flight_controller_millis', self.__millis_callback, qos_profile=qos_profile_sensor_data)
+        self.publisher_ = self.create_publisher(SynchronizedImage, 'raw_indexed_image') # , qos_profile=qos_profile_sensor_data
+        self.subscription_ = self.create_subscription(Int64, 'flight_controller_millis', self.__millis_callback) #, qos_profile=qos_profile_sensor_data
         self.subscription_ # suppresses unused variable warning
 
         self.__init_cap()

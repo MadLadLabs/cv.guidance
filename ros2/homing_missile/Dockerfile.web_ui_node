@@ -36,4 +36,10 @@ RUN sed --in-place --expression \
       '$isource "/ros2_packages/install/setup.bash"' \
       /ros_entrypoint.sh
 
+COPY fastrtps /fastrtps
+
+ENV FASTRTPS_DEFAULT_PROFILES_FILE /fastrtps/qos.xml
+ENV RMW_FASTRTPS_USE_QOS_FROM_XML 1
+ENV RMW_IMPLEMENTATION rmw_fastrtps_cpp
+
 CMD [ "ros2", "run", "homing_missile", "web_ui_node"]

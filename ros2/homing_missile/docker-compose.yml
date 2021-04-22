@@ -6,9 +6,13 @@ services:
       dockerfile: Dockerfile.camera_publisher_node
     devices:
       - "/dev/video0:/dev/video0"
+    ipc: "shareable"
   web_ui_node:
     build: 
       context: .
       dockerfile: Dockerfile.web_ui_node
     ports:
       - "8080:8080"
+    depends_on:
+      - "camera_publisher_node"
+    ipc: "service:camera_publisher_node"
