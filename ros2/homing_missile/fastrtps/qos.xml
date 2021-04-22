@@ -15,6 +15,7 @@
                 <userTransports>
                     <transport_id>shm_transport</transport_id>
                 </userTransports>
+                <useBuiltinTransports>false</useBuiltinTransports>
             </rtps>
         </participant>
 
