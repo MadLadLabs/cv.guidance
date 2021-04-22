@@ -1,5 +1,6 @@
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import qos_profile_sensor_data
 from homing_missile_interfaces.msg import SynchronizedImage
 from std_msgs.msg import Int64
 from cv_bridge import CvBridge
@@ -16,8 +17,8 @@ class CameraPublisher(Node):
 
         self.__init_params()
 
-        self.publisher_ = self.create_publisher(SynchronizedImage, 'raw_indexed_image', 10)
-        self.subscription_ = self.create_subscription(Int64, 'flight_controller_millis', self.__millis_callback, 10)
+        self.publisher_ = self.create_publisher(SynchronizedImage, 'raw_indexed_image', qos_profile=qos_profile_sensor_data)
+        self.subscription_ = self.create_subscription(Int64, 'flight_controller_millis', self.__millis_callback, qos_profile=qos_profile_sensor_data)
         self.subscription_ # suppresses unused variable warning
 
         self.__init_cap()
@@ -74,7 +75,7 @@ class CameraPublisher(Node):
                 msg.millis = self.millis
             self.publisher_.publish(msg)
             self.get_logger().debug('Published synchronized video frame')
-            time.sleep(0.005)
+            time.sleep(0.02)
 
 def main():
     rclpy.init()
