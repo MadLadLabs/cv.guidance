@@ -18,6 +18,14 @@
             </rtps>
         </participant>
 
+        <publisher profile_name="default publisher profile" is_default_profile="true">
+            <historyMemoryPolicy>PREALLOCATED_WITH_REALLOC</historyMemoryPolicy>
+        </publisher>
+
+        <subscriber profile_name="default subscriber profile" is_default_profile="true">
+            <historyMemoryPolicy>PREALLOCATED_WITH_REALLOC</historyMemoryPolicy>
+        </subscriber>
+
         <!-- Default publisher profile -->
         <!-- <publisher profile_name="default publisher profile" is_default_profile="true">
             <qos>
