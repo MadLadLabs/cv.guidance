@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <title>CV Guidance UI</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="stylesheet" href="style.css">
+    <script src="bobboteck-JoyStick/joy.js"></script>
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <div class="outer-container">
+        <div class="left-container">
+            <div class="container-filler"></div>
+            <div class="joystick-outer-container">
+                <div class="joystick-label">
+                    PAN
+                </div>
+                <div class="joystick-container" id="joystick_pan"></div>
+            </div>
+            <div class="joystick-outer-container">
+                <div class="joystick-label">
+                    RETICLE
+                </div>
+                <div class="joystick-container" id="joystick_reticle"></div>
+            </div>
+        </div>
+        <div class="middle-container">
+            <div class="outsideWrapper">
+                <div class="overlayContainer" id="overlay_container">
+                  <canvas id="canvas" style="width: 100%; height: 100%;"></canvas>
+                </div>
+                <div class="imageContainer" id="video_feed_container">
+                  <img id="video_feed" class="videoFeed" src="test_image.jpg">
+                </div>
+            </div>
+        </div>
+        <div class="right-container">
+            <div class="zoom-gate-control-container">
+                <div class="zoom-gate-controls">
+                    <div class="zoom-gate-label">ZOOM</div>
+                    <div class="zoom-gate-value" id="zoom_value">1x</div>
+                    <input type="button" class="button gray-button" value="+" onclick="panZoomControl.zoomIn()">
+                    <input type="button" class="button gray-button" value="-" onclick="panZoomControl.zoomOut()">
+                </div>
+                <div class="zoom-gate-controls">
+                    <div class="zoom-gate-label">GATE</div>
+                    <div class="zoom-gate-value" id="gate_value">5</div>
+                    <input type="button" class="button gray-button" value="+" onclick="reticleControl.increaseGateSize()">
+                    <input type="button" class="button gray-button" value="-" onclick="reticleControl.decreaseGateSize()">
+                </div>
+            </div>
+            <div class="container-filler"></div>
+            <div class="button-container">
+                <input type="button" class="button big-button green-button" value="LOCK" onclick="console.log('lock')">
+            </div>
+            <div class="button-container">
+                <input type="button" class="button big-button red-button" value="LAUNCH" onclick="console.log('launch')">
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
